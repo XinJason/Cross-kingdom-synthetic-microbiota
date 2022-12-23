@@ -1,4 +1,5 @@
 [TOC]
+#Citation: Zhou et al., Cross-kingdom synthetic microbiota supports tomato suppression of Fusarium wilt disease. Nat Commun 13, 7890 (2022). https://doi.org/10.1038/s41467-022-35452-6
 #!/bin/bash
 # Xin Zhou
 
