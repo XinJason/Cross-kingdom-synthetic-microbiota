@@ -1,5 +1,5 @@
 
-##Author：XinZhou
+##Author：#Citation: Zhou et al., Cross-kingdom synthetic microbiota supports tomato suppression of Fusarium wilt disease. Nat Commun 13, 7890 (2022). https://doi.org/10.1038/s41467-022-35452-6
 
 # Download genome of Solanum lycopersicum in NCBI
 wget -c ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/188/115/GCF_000188115.3_SL2.50/GCF_000188115.3_SL2.50_genomic.fna.gz
@@ -27,7 +27,6 @@ echo "`zcat AllT1_R1.fq.gz | wc -l` / (4*1000000)" | bc -l
 zcat AllT1_R1.fq.gz | awk '{if(FNR%4==0) base+=length}END{print base/10^9,"G";}'
 
 fastqc AllT1_R1.fq.gz
-
 
 fastqc *.fq.gz -t 20
 
@@ -84,7 +83,6 @@ ls Slycopersicum.*
 
 
 #########################
-
 # mkdir
 mkdir -p Tomato_Hisat2
 
@@ -231,11 +229,7 @@ head genome/tomato_genome/GRCh38.chromsize
 
 
 #conda install -c bioconda star 
-
-
 mkdir -p genome/indexCn
-
-
 nohup STAR --runMode genomeGenerate \
   --runThreadN 40 \
   --genomeDir genome/indexCn \
@@ -289,10 +283,6 @@ nohup STAR --runMode alignReads --runThreadN 10 \
 
 ls -sh trt_N061011/*
 
-
-
-# trt_N061011.ReadsPerGene.out.tab: 
-
 # using the --outFilterType Normal vs BySJout options will create slightly different SJ.out.tab counts for the following reason.
 # Imagine that you have a read two junctions, with only 1st junction passing the filter.
 # Then with the Normal option, the 1st junction will be counted in the SJ.out.tab.
@@ -342,7 +332,6 @@ ls -ltr trt_N061011
 
 max_intron_size=5000
 
-
 star_p=" --outFilterType BySJout --outSAMattributes NH HI AS NM MD \
        --outFilterMultimapNmax 20 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 \
        --alignIntronMin 20 --alignIntronMax ${max_intron_size} \
@@ -375,14 +364,7 @@ for i in `tail -n+2 ./metadata.tsv | cut -f 1`; do
         ${i}/${i}.Signal.UniqueMultiple.str1.out.bw 
 done &
 
-
 ls -sh AllT1/*
-# trt_N061011.Aligned.out.bam: bam
-# trt_N061011.Aligned.toTranscriptome.out.bam：RSEM for TPM
-# trt_N061011.Log.final.out: reads
-# trt_N061011.Log.out: 
-# trt_N061011.Log.progress.out:
-
 
 #awk '$3-$2>1000 && $3-$2<2000' genome/Solanum_lycopersicum.gtf.bed12 >genome/Solanum_lycopersicum.model.gtf.bed12
 
@@ -431,7 +413,6 @@ paste `find . -name *.readsCount2` | awk 'BEGIN{OFS=FS="\t" }{line=$1; for(i=2;i
 
 DESeq2.sh -f tomato_trans.Count_matrix.xls -s sampleFile -P 0.01
 
-
 R
 source("https://bioconductor.org/biocLite.R")
 BiocManager::install("AnnotationHub")
@@ -471,15 +452,6 @@ head(keys(hm_org, keytype = "REFSEQ"))
 keys(hm_org, keytype = "ENTREZID", column = "REFSEQ", pattern = "NM_001246833.2")
 
 head(select(hm_org, keys = keys(hm_org), columns = c("ENTREZID", "GO"), keytype = "ENTREZID"))
-
-
-
-
-
-
-
-
-
 
 gene.df <- bitr(gene, fromType = "ENTREZID",
         toType = c("ENSEMBL", "SYMBOL"),
@@ -521,7 +493,6 @@ awk 'BEGIN{OFS=FS="\t"}ARGIND==1{symbol[$1]=$2;}ARGIND==2{if(symbol[$1]!="") pri
 
 clusterProfileGO.sh -f ehbio.DESeq2.all.DE.entrez -r org.Hs.eg.db -s hsa
 clusterProfileKEGG.sh -f ehbio.DESeq2.all.DE.entrez -s hsa -r org.Hs.eg.db
-
 
 head -n 11 tomato_trans.Count_matrix.xls.DESeq2.All._higherThan_.BAC.xls >tomato_trans.Count_matrix.xls.DESeq2.All._higherThan_.BAC.top10.xls 
 sp_enrichmentPlot.sh -f tomato_trans.Count_matrix.xls.DESeq2.All._higherThan_.BAC.top10.xls  -o GeneRatio -T numeric -v Description -c qvalue -s Count -l qvalue 
