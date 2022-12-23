@@ -1,7 +1,5 @@
 [TOC]
-
-#Author Zhouxin
-#Email: zhouxin5518@163.com
+#Citation: Zhou et al., Cross-kingdom synthetic microbiota supports tomato suppression of Fusarium wilt disease. Nat Commun 13, 7890 (2022). https://doi.org/10.1038/s41467-022-35452-6
 #print working directory
 pwd 
 
@@ -38,28 +36,7 @@ l=library1
 
 # merge pair-end sequences
 vsearch --fastq_mergepairs   LM181115-6004_L1_A004.R1.clean.fastq --reverse    LM181115-6004_L1_A004.R2.clean.fastq --fastqout B4_merged.fq
-##Merging reads 100%
-#  12192510  Pairs
-#  10154905  Merged (83.3%)
-#  2037605  Not merged (16.7%)
-#Pairs that failed merging due to various reasons:
-#     3342  too few kmers found on same diagonal
-#   29144  multiple potential alignments
-#  44676  too many differences
-# 66901  alignment score too low, or score drop to high
-#  125  overlap too short
-#   1893417  staggered read pairs
-#Statistics of all reads:
-#   250.00  Mean read length
-#Statistics of merged reads:
-#   306.91  Mean fragment length
-#    9.94  Standard deviation of fragment length
-#   0.34  Mean expected error in forward sequences
-#  0.75  Mean expected error in reverse sequences
-# 0.09  Mean expected error in merged sequences
-#0.14  Mean observed errors in merged region of forward sequences
-#      0.27  Mean observed errors in merged region of reverse sequences
-#     0.41  Mean observed errors in merged region
+
 ####################################################
 
 # extract samples according to library.txt
@@ -147,7 +124,6 @@ mkdir result/zclusters
 vsearch --cluster_size result/all_strain.fa \
  --centroids result/zotus.fa --clusters result/zclusters/zclusted.fas --id 0.99   
    
-
 ####################################
 ##extract all the names from cluster
 cd result/
@@ -159,7 +135,6 @@ done &
 
 cut -d '.' -f 1 cluster1.txt > cluster2.txt
 
-
 find . -type f -name "*.fa" > 1.txt
 ## find and delete ./
 sed 's/\.\///g' 1.txt > 2.txt
@@ -168,15 +143,10 @@ sed "s/.derep.fa//g" 2.txt > 3.txt
 
 mv 3.txt ../unclassified2.txt
 
-
-
 for i in `tail -n+2 ./cluster_name.txt | cut -f 1` ; do
   grep ">" ./${i} | cat > cluster_name/${i}.txt
 
 done &
-
-
-
 ######NCBI taxonomy annotation
 blastn -max_target_seqs 3 -db /public/PubDatabase/ncbi/nt/nt -out zouts.blast -query zotus.fas \
 -num_threads 8 -outfmt "6 qseqid qlen qstart qend stitle sseqid slen sstart send qcovs bitscore evalue pident"
@@ -197,7 +167,6 @@ done &
 
 # Taxonomy 
 sed -i 's/(//g;s/)//g;s/\"//g;s/\#//g;s/\/Chloroplast//g' tax/sum_*.txt
-
 
 cut -f 1,4 zouts.tax \
   |sed 's/\td/\tk/;s/:/__/g;s/,/;/g;s/"//g;s/\/Chloroplast//' \
@@ -220,12 +189,10 @@ python fasta2phylip.py
 
 raxmlHPC-PTHREADS-SSE3 -f a -s alpha_pep_align_gb.phy -n tre -m GTRGAMMA -x 1234 -# 1000 -T 8 &
 
-
 # Find unique read sequences and abundances, miniuniqusize 
 
 vsearch --derep_fulllength temp/all_nonchimera.fa \
   --output temp/uniques.fa --relabel Uni --minuniquesize 8 --sizeout 
-
 
 mkdir -p clean
 awk 'BEGIN{OFS=FS="\t"}{system("usearch10 -fastx_truncate samples/"$1".fq \
@@ -233,10 +200,8 @@ awk 'BEGIN{OFS=FS="\t"}{system("usearch10 -fastx_truncate samples/"$1".fq \
 
 head clean/S01.fq
 
-
 rm -r samples library1.fq
 gzip *.fq
-
 
 #################
 #obtain  reverse complementary sequence
