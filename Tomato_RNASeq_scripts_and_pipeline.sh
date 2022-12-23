@@ -1,6 +1,6 @@
 
 ##Author：#Citation: Zhou et al., Cross-kingdom synthetic microbiota supports tomato suppression of Fusarium wilt disease. Nat Commun 13, 7890 (2022). https://doi.org/10.1038/s41467-022-35452-6
-
+# Email: zhouxin5518@163.com
 # Download genome of Solanum lycopersicum in NCBI
 wget -c ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/188/115/GCF_000188115.3_SL2.50/GCF_000188115.3_SL2.50_genomic.fna.gz
 
